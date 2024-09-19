@@ -1,13 +1,8 @@
-﻿using FreeCourse.Services.Catalog.Models;
-using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
-using System;
-
-namespace FreeCourse.Services.Catalog.DTO
+﻿namespace FreeCourse.Services.Catalog.DTO
 {
-    public class CourseDTO
+    public class CourseUpdateDTO
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public string Name { get; set; }
 
@@ -19,12 +14,8 @@ namespace FreeCourse.Services.Catalog.DTO
 
         public string Picture { get; set; }
 
-        public DateTime CreatedTime { get; set; }
-
         public FeatureDTO Feature { get; set; }
 
         public string CategoryId { get; set; }
-
-        public CategoryDTO Category { get; set; }
     }
 }
