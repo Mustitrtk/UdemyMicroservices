@@ -4,6 +4,7 @@ using FreeCourse.Services.Catalog.Models;
 using FreeCourse.Services.Catalog.Settings;
 using FreeCourse.Shared.DTO;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -78,6 +79,42 @@ namespace FreeCourse.Services.Catalog.Services
             }
 
             return ResponseDTO<List<CourseDTO>>.Success(_mapper.Map<List<CourseDTO>>(courses), 200);
+        }
+
+        public async Task<ResponseDTO<CourseDTO>> CreateAsync(CourseCreateDTO course)
+        {
+            var _course = _mapper.Map<Course>(course);
+            
+            _course.CreatedTime = DateTime.Now;
+            await _courseCollection.InsertOneAsync(_course);
+
+            return ResponseDTO<CourseDTO>.Success(_mapper.Map<CourseDTO>(_course),200);
+        }
+
+        public async Task<ResponseDTO<NoContent>> UpdateAsync(CourseUpdateDTO courseUpdateDTO)
+        {
+            var updateCourse = _mapper.Map<Course>(courseUpdateDTO);
+
+            var result = await _courseCollection.FindOneAndReplaceAsync(x=> x.Id == courseUpdateDTO.Id,updateCourse);
+
+            if(result == null)
+            {
+                return ResponseDTO<NoContent>.Fail("Course not found!",404);
+            }
+
+            return ResponseDTO<NoContent>.Success(204);
+        }
+
+        public async Task<ResponseDTO<NoContent>> DeleteAsync(string id)
+        {
+            var result = await _courseCollection.DeleteOneAsync(x=> x.Id == id);
+
+            if (result.DeletedCount >0) 
+            {
+                return ResponseDTO<NoContent>.Fail("Data not found!",404);
+            }
+
+            return ResponseDTO<NoContent>.Success(200);
         }
     }
 }
