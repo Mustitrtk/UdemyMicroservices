@@ -37,7 +37,7 @@ namespace FreeCourse.Services.Catalog.Controllers
             //return Ok(response);
         }
 
-        //[HttpGet("{userId}")] // olmaz aynı route var.
+        [HttpGet] // olmaz aynı route var.
         [Route("api/[controller]/GetByUserId/{userId}")]
         public async Task<IActionResult> GetByUserId (string userId)
         {
